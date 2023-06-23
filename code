@@ -1,13 +1,9 @@
-#include<fstream.h>
-#include<conio.h>
-#include<time.h>
-#include<stdlib.h>
-#include<stdio.h>
-#include<string.h>
+#include<bits/stdc++.h>
+using namespace std;
 char ch;
-char pass[5];
+string pass;
 char confirm_change;
-int change_type,search,bool=0;
+int change_type,searchs, flag2=0;
 int movie_name,movie_time,ticket_no;
 int seat_no,seat_book[50],i,j,no,k,t;
 int l,randnum,p;
@@ -34,60 +30,49 @@ struct customer
 }C;
 void beginning()
 {
-	cout<<"\n\n\n\n\n\n\n\t\t\t\tMOVIETIME";
-	cout<<"\n\n\t\t\tMade By:-  Ishan Agrawal"<<endl;
-	cout<<"\t\t\t\t   Arnav Goel";
-	cout<<"\n\t\t\tClass:- XII-F ";
-	cout<<"\n\t\t\tSt. Mark's Sr. Sec. Public School,    Meera Bagh";
-	getch();
-	clrscr();
-	relogin:                             //label
+	//relogin:                             //label
 	cout<<"\n\n\t\t\tLogin as:\n\t\t\t1. User\n\t\t\t2. Administrator\n";
 	cin>>login_choice;
 	switch(login_choice)
 	{
 		case 1: movie_display();
-			movie_select();
-			break;
-case 2: administrator();
-			break;
+                movie_select();
+                break;
+        case 2: administrator();
+                break;
 
 		default: cout<<"Invalid Choice !!";
-			getch();
-			clrscr();
-			goto relogin;
+                beginning();
 	}
-	getch();
 }
 
 void movie_display()         //udf for displaying movies
 {
-	clrscr();
-	cout<<"\n\n\t1. Zombieland 2"; 
-     cout<<"\t\t\t2. Maleficent";
-cout<<"\n\tEnglish,U/A";                       cout<<"\t\t\t\tEnglish,U/A";
 
-	cout<<"\n\n\t3. War ";  
+	cout<<"\n\n\t1. Zombieland 2";
+     cout<<"\t\t\t2. Maleficent";
+    cout<<"\n\tEnglish,U/A";
+    cout<<"\t\t\t\tEnglish,U/A";
+	cout<<"\n\n\t3. War ";
 cout<<"\t\t\t\t4. Housefull 4";
-cout<<"\n\tHindi,U/A";               cout<<"\t\t\t\tHindi,U/A";
+cout<<"\n\tHindi,U/A";
+     cout<<"\t\t\t\tHindi,U/A";
 
 }
 
 void movie_select()        //udf for accepting movie and displaying timings
 {
-removie:                         //label
+//removie:                         //label
 	cout<<"\n\n\t\t\tPlease enter your choice: ";
 	cin>>movie_name;                 //accepting movies
 
-	clrscr();
-
 	switch(movie_name)         //cases of timings for      diff. movies
 	{
-case 1:cout<<"\n\n\n\t\t\Zombieland 2   \n\t\tEnglish,U/A";
+            case 1:cout<<"\n\n\n\t\t\Zombieland 2   \n\t\tEnglish,U/A";
 			time_select();          //calling udf for displaying
 			break;                  //and accepting timings
 
-case 2:cout<<"\n\n\n\t\t\Maleficent  \n\t\tEnglish,U/A";
+            case 2:cout<<"\n\n\n\t\t\Maleficent  \n\t\tEnglish,U/A";
 			time_select();
 			break;
 
@@ -99,18 +84,13 @@ case 4:cout<<"\n\n\n\t\t\Housefull 4 \n\t\tHindi,U/A";
 			time_select();
 			break;
 default:cout<<"\n\n\n\t\tInvalid Choice!!";
-		cout<<"\n\n\n\t\tPress any key to continue: ";
+            movie_select(); //calling udf for again selecting movie
 
-		ch=getch();
-clrscr();
-
-	    movie_display(); //calling udf for again diplaying movies
-			goto removie;
        }
 }
 void time_select()
 {
-	clrscr();
+
 	cout<<"\n\t\tTimings:";
 	cout<<"\n\t\t1. 11:00 am - 2:00 pm";
 	cout<<"\n\t\t2. 3:00 pm - 6:00 pm";
@@ -121,7 +101,7 @@ cout<<"\n\n\t\t\tPlease enter your choice: ";
 }
 void seat_select()              //udf for display of seat table and accepting it
 {
-	clrscr();
+
 switch(movie_time)       //switching diff. movie times
 	{
 		case 1: if(movie_name==1)    //1st movie and 1st timing
@@ -162,18 +142,13 @@ switch(movie_time)       //switching diff. movie times
 					}
 					if(flag==1)
 					{
-cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+                        cout<<"\n\n\t\tInvalid Choice"<<endl;
 						goto reseat1;
 					}
 				}
 
 				a1.close();
 				for(i=0;i<seat_no;i++)
-				
-
-
 {
 					fstream a12;   //deleting the selected seats from seat table
 					a12.open("1a2.dat",ios::app|ios::binary);
@@ -189,31 +164,22 @@ cout<<"\n\n\t\tInvalid Choice"<<endl;
 							a12<<t<<"  ";
 						}
 					}
-					
+
 a1.close();
 					a12.close();
 					remove("1a.dat");
 					rename("1a2.dat","1a.dat");
 				}
 
-				
 
-				clrscr();
+
+
 				generate();     //calling generate udf
 				display();
 			}
 			else if(movie_name==2)   //2nd movie and 1st timing
 			{
 				reseat2:            //label
-				
-
-
-
-
-
-
-
-
 fstream b1;
 				b1.open("1b.dat",ios::in|ios::binary);
 
@@ -249,8 +215,7 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+
 						goto reseat2;
 					}
 				}
@@ -275,7 +240,7 @@ fstream b1;
 					remove("1b.dat");
 					rename("1b2.dat","1b.dat");
 				}
-				clrscr();
+
 				generate();     //calling generate udf
 				display();
 			}
@@ -316,8 +281,6 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
 						goto reseat3;
 					}
 				}
@@ -342,7 +305,6 @@ fstream b1;
 					remove("1c.dat");
 					rename("1c2.dat","1c.dat");
 				}
-				clrscr();
 				generate();     //calling generate udf
 			}
 			else if(movie_name==4)  //4th movie and 1st timing
@@ -382,8 +344,7 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+
 						goto reseat4;
 					}
 				}
@@ -408,7 +369,7 @@ fstream b1;
 					remove("1d.dat");
 					rename("1d2.dat","1d.dat");
 				}
-				clrscr();
+
 				generate();     //calling generate udf
 				display();
 			}
@@ -452,8 +413,7 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+
 						goto reseat5;
 					}
 				}
@@ -478,7 +438,7 @@ fstream b1;
 					remove("2a.dat");
 					rename("2a2.dat","2a.dat");
 				}
-				clrscr();
+
 				generate();     //calling generate udf
 				display();
 			}
@@ -519,8 +479,6 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
 						goto reseat6;
 					}
 				}
@@ -545,7 +503,7 @@ fstream b1;
 					remove("2b.dat");
 					rename("2b2.dat","2b.dat");
 				}
-				clrscr();
+
 				generate();     //calling generate udf
 				display();
 			}
@@ -586,8 +544,7 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+
 						goto reseat7;
 					}
 				}
@@ -612,7 +569,7 @@ fstream b1;
 					remove("2c.dat");
 					rename("2c2.dat","2c.dat");
 				}
-				clrscr();
+
 				generate();  //calling generate udf
 				display();
 			}
@@ -653,8 +610,7 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+
 						goto reseat8;
 					}
 				}
@@ -679,7 +635,7 @@ fstream b1;
 					remove("2d.dat");
 					rename("2d2.dat","2d.dat");
 				}
-				clrscr();
+
 				generate();     //calling generate udf
 				display();
 			}
@@ -722,8 +678,7 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+
 						goto reseat9;
 					}
 				}
@@ -747,7 +702,7 @@ fstream b1;
 					remove("3a.dat");
 					rename("3a2.dat","3a.dat");
 				}
-				clrscr();
+
 				generate();     //calling generate udf
 				display();
 			}
@@ -786,8 +741,7 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+
 						goto reseat10;
 					}
 				}
@@ -810,7 +764,7 @@ fstream b1;
 					remove("3b.dat");
 					rename("3b2.dat","3b.dat");
 				}
-				clrscr();
+
 				generate();     //calling generate udf
 				display();
 			}
@@ -849,8 +803,7 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+
 						goto reseat11;
 					}
 				}
@@ -873,7 +826,7 @@ fstream b1;
 					remove("3c.dat");
 					rename("3c2.dat","3c.dat");
 				}
-				clrscr();
+
 				generate();     //calling generate udf
 				display();
 			}
@@ -913,8 +866,7 @@ fstream b1;
 					if(flag==1)
 					{
 						cout<<"\n\n\t\tInvalid Choice"<<endl;
-						getch();
-						clrscr();
+
 						goto reseat12;
 					}
 				}
@@ -936,16 +888,14 @@ fstream b1;
 					remove("3d.dat");
 					rename("3d2.dat","3d.dat");
 				}
-				clrscr();
+
 				generate();     //calling generate udf
 				display();
 			}
 			break;
 		default:{
 				cout<<"\n\n\n\t\tInvalid Choice!!";
-				cout<<"\n\n\n\t\tPress any key to continue:";
-				ch=getch();
-				clrscr();
+
 				time_select();    //calling udf again
 
 			}
@@ -978,27 +928,23 @@ fstream c1;
 
 void administrator()
 {
-	passw:
-	clrscr();
 	cout<<"\n\n\n\n\t\t\tEnter password:";
-	for(int r=0;r<3;r++)
-{
-	pass[r]=getch();
-	cout<<”*”;
-}
-if(strcmp(pass,”709”)==0)             //checking for password
-	{       reticket:
-		clrscr();
+	cin>>pass;
+
+    if(pass=="709")             //checking for password
+	{
+	     reticket:
+
 		cout<<"\n\n\n\t\t\tEnter ticket no:";
-		cin>>search;
+		cin>>searchs;
 		fstream c1;
 c1.open("customers.dat",ios::in|ios::binary);    //searching for record in customer's file
 		while(!c1.eof())
 		{
 			while(c1.read((char*)&C,sizeof (customer)))
-			if(search==C.code)
+			if(searchs==C.code)
 			{
-				bool=1;
+				flag2=1;
 				cout<<"\n\n\n\t\t\t"<<C.code;
 				switch(C.movie_code)
 				{
@@ -1034,11 +980,10 @@ c1.open("customers.dat",ios::in|ios::binary);    //searching for record in custo
 				}
 			}
 		}
-		if(bool==0)
+		if(flag2==0)
 		{
 cout<<"\n\n\n\t\t\tTicket number not found.";
 			cout<<"\n\t\t\tPlease enter again." ;
-			getch();
 			goto reticket;
 		}
 	}
@@ -1046,8 +991,8 @@ cout<<"\n\n\n\t\t\tTicket number not found.";
 	{
 		cout<<"\n\n\n\t\t\tWrong password";
 		cout<<"\n\t\t\tPlease enter again.";
-		getch();
-		goto passw;
+		administrator();
+
 	}
 
 
@@ -1074,7 +1019,7 @@ void display()     //udf to display final details of the user
 		default:break;
 	}
 	switch(movie_time)
-	{	
+	{
 case 1: cout<<"\n\n\t\t\t11:00 am - 2:00 pm";
 			break;
 		case 2: cout<<"\n\n\t\t\t3:00 pm - 6:00 pm";
@@ -1092,12 +1037,11 @@ case 1: cout<<"\n\n\t\t\t11:00 am - 2:00 pm";
 	}
 	cout<<"\n\n\t\tPlease show the above details at the ticket counter"<<endl;
 		cout<<"\t\t\tand make the reqiured payment !";
-	getch();
+
 }
 
-void main()
+int main()
 {
-	clrscr();
 	beginning();
+	return 0;
 }
-
