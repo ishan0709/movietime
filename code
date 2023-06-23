@@ -1,0 +1,1103 @@
+#include<fstream.h>
+#include<conio.h>
+#include<time.h>
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+char ch;
+char pass[5];
+char confirm_change;
+int change_type,search,bool=0;
+int movie_name,movie_time,ticket_no;
+int seat_no,seat_book[50],i,j,no,k,t;
+int l,randnum,p;
+unsigned int seedval;
+time_t m;
+int flag;
+int login_choice;
+void movie_display();
+void movie_select();
+void administrator();
+void show_seat();
+void seat_select();
+void time_select();
+void generate();
+void saving();
+void display();
+struct customer
+{
+	int code;
+	int movie_code;
+	int time_code;
+	int no_code;
+	int seat_code[50];
+}C;
+void beginning()
+{
+	cout<<"\n\n\n\n\n\n\n\t\t\t\tMOVIETIME";
+	cout<<"\n\n\t\t\tMade By:-  Ishan Agrawal"<<endl;
+	cout<<"\t\t\t\t   Arnav Goel";
+	cout<<"\n\t\t\tClass:- XII-F ";
+	cout<<"\n\t\t\tSt. Mark's Sr. Sec. Public School,    Meera Bagh";
+	getch();
+	clrscr();
+	relogin:                             //label
+	cout<<"\n\n\t\t\tLogin as:\n\t\t\t1. User\n\t\t\t2. Administrator\n";
+	cin>>login_choice;
+	switch(login_choice)
+	{
+		case 1: movie_display();
+			movie_select();
+			break;
+case 2: administrator();
+			break;
+
+		default: cout<<"Invalid Choice !!";
+			getch();
+			clrscr();
+			goto relogin;
+	}
+	getch();
+}
+
+void movie_display()         //udf for displaying movies
+{
+	clrscr();
+	cout<<"\n\n\t1. Zombieland 2"; 
+     cout<<"\t\t\t2. Maleficent";
+cout<<"\n\tEnglish,U/A";                       cout<<"\t\t\t\tEnglish,U/A";
+
+	cout<<"\n\n\t3. War ";  
+cout<<"\t\t\t\t4. Housefull 4";
+cout<<"\n\tHindi,U/A";               cout<<"\t\t\t\tHindi,U/A";
+
+}
+
+void movie_select()        //udf for accepting movie and displaying timings
+{
+removie:                         //label
+	cout<<"\n\n\t\t\tPlease enter your choice: ";
+	cin>>movie_name;                 //accepting movies
+
+	clrscr();
+
+	switch(movie_name)         //cases of timings for      diff. movies
+	{
+case 1:cout<<"\n\n\n\t\t\Zombieland 2   \n\t\tEnglish,U/A";
+			time_select();          //calling udf for displaying
+			break;                  //and accepting timings
+
+case 2:cout<<"\n\n\n\t\t\Maleficent  \n\t\tEnglish,U/A";
+			time_select();
+			break;
+
+		case 3:cout<<"\n\n\n\t\t\War \n\t\tHindi,U/A";
+			time_select();
+			break;
+
+case 4:cout<<"\n\n\n\t\t\Housefull 4 \n\t\tHindi,U/A";
+			time_select();
+			break;
+default:cout<<"\n\n\n\t\tInvalid Choice!!";
+		cout<<"\n\n\n\t\tPress any key to continue: ";
+
+		ch=getch();
+clrscr();
+
+	    movie_display(); //calling udf for again diplaying movies
+			goto removie;
+       }
+}
+void time_select()
+{
+	clrscr();
+	cout<<"\n\t\tTimings:";
+	cout<<"\n\t\t1. 11:00 am - 2:00 pm";
+	cout<<"\n\t\t2. 3:00 pm - 6:00 pm";
+	cout<<"\n\t\t3. 7:00 pm - 10:00 pm";
+cout<<"\n\n\t\t\tPlease enter your choice: ";
+	cin>>movie_time;                   //accepting choice for timings
+	seat_select();
+}
+void seat_select()              //udf for display of seat table and accepting it
+{
+	clrscr();
+switch(movie_time)       //switching diff. movie times
+	{
+		case 1: if(movie_name==1)    //1st movie and 1st timing
+			{
+				reseat1:            //label
+				fstream a1;
+				a1.open("1a.dat",ios::in|ios::binary);
+
+				while(!a1.eof())
+				{
+				       if(a1>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				a1.close();
+
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;        //accepting no. of seats
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];    //accepting seat no.
+				}
+
+				a1.open("1a.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)   //if available
+				{
+					flag=1;
+					while(!a1.eof())
+					{
+						a1>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat1;
+					}
+				}
+
+				a1.close();
+				for(i=0;i<seat_no;i++)
+				
+
+
+{
+					fstream a12;   //deleting the selected seats from seat table
+					a12.open("1a2.dat",ios::app|ios::binary);
+					a1.open("1a.dat",ios::in|ios::binary);
+
+					while(!a1.eof())
+
+
+					{
+						if(a1>>t)
+						if(t!=seat_book[i])
+						{
+							a12<<t<<"  ";
+						}
+					}
+					
+a1.close();
+					a12.close();
+					remove("1a.dat");
+					rename("1a2.dat","1a.dat");
+				}
+
+				
+
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+			else if(movie_name==2)   //2nd movie and 1st timing
+			{
+				reseat2:            //label
+				
+
+
+
+
+
+
+
+
+fstream b1;
+				b1.open("1b.dat",ios::in|ios::binary);
+
+				while(!b1.eof())
+				{
+				       if(b1>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				b1.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+
+				b1.open("1b.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)  //if available
+				{
+					flag=1;
+					while(!b1.eof())
+					{
+						b1>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat2;
+					}
+				}
+				b1.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream b12;   //deleting the selected seats from seat table
+					b12.open("1b2.dat",ios::app|ios::binary);
+					b1.open("1b.dat",ios::in|ios::binary);
+
+					while(!b1.eof())
+					{
+						if(b1>>t)
+						if(t!=seat_book[i])
+						{
+							b12<<t<<"  ";
+						}
+					}
+
+					b1.close();
+					b12.close();
+					remove("1b.dat");
+					rename("1b2.dat","1b.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+			else if(movie_name==3)  //3rd movie and 1st timing
+			{
+				reseat3:            //label
+				fstream c1;
+				c1.open("1c.dat",ios::in|ios::binary);
+
+				while(!c1.eof())
+				{
+					if(c1>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				c1.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				c1.open("1c.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{
+					flag=1;
+					while(!c1.eof())
+					{
+						c1>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat3;
+					}
+				}
+				c1.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream c12;   //deleting the selected seats from seat table
+					c12.open("1c2.dat",ios::app|ios::binary);
+					c1.open("1c.dat",ios::in|ios::binary);
+
+					while(!c1.eof())
+					{
+						if(c1>>t)
+						if(t!=seat_book[i])
+						{
+							c12<<t<<"  ";
+						}
+					}
+
+					c1.close();
+					c12.close();
+					remove("1c.dat");
+					rename("1c2.dat","1c.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+			}
+			else if(movie_name==4)  //4th movie and 1st timing
+			{
+				reseat4:            //label
+				fstream d1;
+				d1.open("1d.dat",ios::in|ios::binary);
+
+				while(!d1.eof())
+				{
+					if(d1>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				d1.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				d1.open("1d.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{
+					flag=1;
+					while(!d1.eof())
+					{
+						d1>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat4;
+					}
+				}
+				d1.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream d12;   //deleting the selected seats from seat table
+					d12.open("1d2.dat",ios::app|ios::binary);
+					d1.open("1d.dat",ios::in|ios::binary);
+
+					while(!d1.eof())
+					{
+						if(d1>>t)
+						if(t!=seat_book[i])
+						{
+							d12<<t<<"  ";
+						}
+					}
+
+					d1.close();
+					d12.close();
+					remove("1d.dat");
+					rename("1d2.dat","1d.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+
+			break;
+
+		case 2: if(movie_name==1)    //1st movie and 2nd timing
+			{
+				reseat5:            //label
+				fstream a2;
+				a2.open("2a.dat",ios::in|ios::binary);
+
+				while(!a2.eof())
+				{
+				       if(a2>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				a2.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				a2.open("2a.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{
+					flag=1;
+					while(!a2.eof())
+					{
+						a2>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat5;
+					}
+				}
+				a2.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream a22;   //deleting the selected seats from seat table
+					a22.open("2a2.dat",ios::app|ios::binary);
+					a2.open("2a.dat",ios::in|ios::binary);
+
+					while(!a2.eof())
+					{
+						if(a2>>t)
+						if(t!=seat_book[i])
+						{
+							a22<<t<<"  ";
+						}
+					}
+
+					a2.close();
+					a22.close();
+					remove("2a.dat");
+					rename("2a2.dat","2a.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+			else if(movie_name==2) //2nd movie and 2nd timing
+			{
+				reseat6:            //label
+				fstream b2;
+				b2.open("2b.dat",ios::in|ios::binary);
+
+				while(!b2.eof())
+				{
+					if(b2>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				b2.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				b2.open("2b.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{
+					flag=1;
+					while(!b2.eof())
+					{
+						b2>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat6;
+					}
+				}
+				b2.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream b22;   //deleting the selected seats from seat table
+					b22.open("2b2.dat",ios::app|ios::binary);
+					b2.open("2b.dat",ios::in|ios::binary);
+
+					while(!b2.eof())
+					{
+						if(b2>>t)
+						if(t!=seat_book[i])
+						{
+							b22<<t<<"  ";
+						}
+					}
+
+					b2.close();
+					b22.close();
+					remove("2b.dat");
+					rename("2b2.dat","2b.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+			else if(movie_name==3)  //3rd movie and 2nd timing
+			{
+				reseat7:            //label
+				fstream c2;
+				c2.open("2c.dat",ios::in|ios::binary);
+
+				while(!c2.eof())
+				{
+				       if(c2>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				c2.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				c2.open("2c.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{
+					flag=1;
+					while(!c2.eof())
+					{
+						c2>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat7;
+					}
+				}
+				c2.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream c22;   //deleting the selected seats from seat table
+					c22.open("2c2.dat",ios::app|ios::binary);
+					c2.open("2c.dat",ios::in|ios::binary);
+
+					while(!c2.eof())
+					{
+						if(c2>>t)
+						if(t!=seat_book[i])
+						{
+							c22<<t<<"  ";
+						}
+					}
+
+					c2.close();
+					c22.close();
+					remove("2c.dat");
+					rename("2c2.dat","2c.dat");
+				}
+				clrscr();
+				generate();  //calling generate udf
+				display();
+			}
+			else if(movie_name==4)  //4th movie and 2nd timing
+			{
+				reseat8:            //label
+				fstream d2;
+				d2.open("2d.dat",ios::in|ios::binary);
+
+				while(!d2.eof())
+				{
+				       if(d2>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				d2.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				d2.open("d2dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{
+					flag=1;
+					while(!d2.eof())
+					{
+						d2>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat8;
+					}
+				}
+				d2.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream d22;   //deleting the selected seats from seat table
+					d22.open("2d2.dat",ios::app|ios::binary);
+					d2.open("2d.dat",ios::in|ios::binary);
+
+					while(!d2.eof())
+					{
+						if(d2>>t)
+						if(t!=seat_book[i])
+						{
+							d22<<t<<"  ";
+						}
+					}
+
+					d2.close();
+					d22.close();
+					remove("2d.dat");
+					rename("2d2.dat","2d.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+			break;
+
+		case 3: if(movie_name==1)     //1st movie and 3rd timing
+			{
+				reseat9:            //label
+				fstream a3;
+				a3.open("3a.dat",ios::in|ios::binary);
+
+				while(!a3.eof())
+				{
+				       if(a3>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				a3.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				a3.open("3a.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{
+					flag=1;
+					while(!a3.eof())
+					{
+						a3>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat9;
+					}
+				}
+				a3.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream a32;   //deleting the selected seats from seat table
+					a32.open("3a2.dat",ios::app|ios::binary);
+					a3.open("3a.dat",ios::in|ios::binary);
+
+					while(!a3.eof())
+					{
+						if(a3>>t)
+						if(t!=seat_book[i])
+						{
+							a32<<t<<"  ";
+						}
+					}
+					a3.close();
+					a32.close();
+					remove("3a.dat");
+					rename("3a2.dat","3a.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+			else if(movie_name==2)    //2nd movie and 3rd timing
+			{
+				reseat10:            //label
+				fstream b3;
+				b3.open("b3.dat",ios::in|ios::binary);
+				while(!b3.eof())
+				{
+				       if(b3>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				b3.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				b3.open("3b.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{               					flag=1;
+					while(!b3.eof())
+					{
+						b3>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat10;
+					}
+				}
+				b3.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream b32;   //deleting the selected seats from seat table
+	b32.open("3b2.dat",ios::app|ios::binary);
+	b3.open("3b.dat",ios::in|ios::binary);
+					while(!b3.eof())
+					{
+						if(b3>>t)
+						if(t!=seat_book[i])
+						{
+							b32<<t<<"  ";
+						}
+					}
+					b3.close();
+					b32.close();
+					remove("3b.dat");
+					rename("3b2.dat","3b.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+			else if(movie_name==3)   //3rd movie and 3rd timing
+			{
+				reseat11:            //label
+				fstream c3;
+				c3.open("3c.dat",ios::in|ios::binary);			while(!c3.eof())
+				{
+				       if(c3>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				c3.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				c3.open("3c.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{
+					flag=1;
+					while(!c3.eof())
+					{
+						c3>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat11;
+					}
+				}
+				c3.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream c32;   //deleting the selected seats from seat table
+	c32.open("3c2.dat",ios::app|ios::binary);
+	c3.open("3c.dat",ios::in|ios::binary);
+					while(!c3.eof())
+					{
+						if(c3>>t)
+						if(t!=seat_book[i])
+						{
+							c32<<t<<"  ";
+						}
+					}
+					c3.close();
+					c32.close();
+					remove("3c.dat");
+					rename("3c2.dat","3c.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+			else if(movie_name==4)   //4th movie and 3rd timing
+			{
+				reseat12:            //label
+				fstream d3;
+				d3.open("3d.dat",ios::in|ios::binary);
+				while(!d3.eof())
+				{
+				       if(d3>>i)
+					cout<<i<<"   ";
+					if(i%10==0)
+					cout<<endl;
+				}
+				d3.close();
+				cout<<"\n\n\tEnter the number of seats you want to select(1 seat=Rs 250):";
+				cin>>seat_no;
+				cout<<"\n\t\tEnter the seat numbers:";
+				for(i=0;i<seat_no;i++)
+				{
+					cin>>seat_book[i];
+				}
+				d3.open("3d.dat",ios::in|ios::binary);  //query for the seat number
+				for(i=0;i<seat_no;i++)                  //if available
+				{
+					flag=1;
+					while(!d3.eof())
+					{
+						d3>>k;
+						if(k==seat_book[i])
+						{
+							flag=0;
+							break;
+						}
+					}
+					if(flag==1)
+					{
+						cout<<"\n\n\t\tInvalid Choice"<<endl;
+						getch();
+						clrscr();
+						goto reseat12;
+					}
+				}
+				d3.close();
+				for(i=0;i<seat_no;i++)
+				{
+					fstream d32;   //deleting the selected seats from seat table
+	d32.open("3d2.dat",ios::app|ios::binary);
+	d3.open("3d.dat",ios::in|ios::binary);
+					while(!d3.eof())
+					{
+						if(d3>>t)
+						if(t!=seat_book[i])
+						{
+							d32<<t<<"  ";
+						}    					}
+					d3.close();
+					d32.close();
+					remove("3d.dat");
+					rename("3d2.dat","3d.dat");
+				}
+				clrscr();
+				generate();     //calling generate udf
+				display();
+			}
+			break;
+		default:{
+				cout<<"\n\n\n\t\tInvalid Choice!!";
+				cout<<"\n\n\n\t\tPress any key to continue:";
+				ch=getch();
+				clrscr();
+				time_select();    //calling udf again
+
+			}
+	}
+}
+void generate()           //udf for generating random code as a ticket no.
+{
+	seedval=time(&m);
+	srand(seedval);
+	for(i=0;i<1;i++)
+		ticket_no=rand();
+	cout<<"\n\n\t\t\t"<<ticket_no<<" is your ticket number !";
+	saving();  //udf to save customer details in a file
+}
+void saving()
+{
+	C.code=ticket_no;
+	C.movie_code=movie_name;
+	C.time_code=movie_time;
+	C.no_code=seat_no;
+	for(i=0;i<seat_no;i++)
+	{
+		C.seat_code[i]=seat_book[i];
+	}
+fstream c1;
+	c1.open("customers.dat",ios::app|ios::binary);
+	c1.write((char*)&C,sizeof (customer));
+	c1.close();
+}
+
+void administrator()
+{
+	passw:
+	clrscr();
+	cout<<"\n\n\n\n\t\t\tEnter password:";
+	for(int r=0;r<3;r++)
+{
+	pass[r]=getch();
+	cout<<”*”;
+}
+if(strcmp(pass,”709”)==0)             //checking for password
+	{       reticket:
+		clrscr();
+		cout<<"\n\n\n\t\t\tEnter ticket no:";
+		cin>>search;
+		fstream c1;
+c1.open("customers.dat",ios::in|ios::binary);    //searching for record in customer's file
+		while(!c1.eof())
+		{
+			while(c1.read((char*)&C,sizeof (customer)))
+			if(search==C.code)
+			{
+				bool=1;
+				cout<<"\n\n\n\t\t\t"<<C.code;
+				switch(C.movie_code)
+				{
+
+					case 1: cout<<"\n\n\t\t\tZombieland 2";
+					cout<<"\n\t\t\tEnglish U/A";
+					break;
+				case 2:cout <<"\n\n\t\t\tMaleficent";
+					cout<<"\n\t\t\tEnglish U/A";
+					break;
+					case 3: cout<<"\n\n\t\t\tWar";
+					cout<<"\n\t\t\tHindi U/A";
+					break;
+					case 4: cout<<"\n\n\t\t\tHousefull 4";
+					cout<<"\n\t\t\tHindi U/A";
+					break;
+}
+				switch(C.time_code)
+				{
+					case 1: cout<<"\n\n\t\t\t11:00 am - 2:00 pm";
+					break;
+					case 2: cout<<"\n\n\t\t\t3:00 pm - 6:00 pm";
+					break;
+					case 3: cout<<"\n\n\t\t\t7:00 pm - 10:00 pm";
+					break;
+}
+				cout<<"\n\n\t\t\tSeats Selected:";
+				for(i=0;i<C.no_code;i++)
+				{
+					p=C.seat_code[i];
+					cout<<p<<" ";
+
+				}
+			}
+		}
+		if(bool==0)
+		{
+cout<<"\n\n\n\t\t\tTicket number not found.";
+			cout<<"\n\t\t\tPlease enter again." ;
+			getch();
+			goto reticket;
+		}
+	}
+	else
+	{
+		cout<<"\n\n\n\t\t\tWrong password";
+		cout<<"\n\t\t\tPlease enter again.";
+		getch();
+		goto passw;
+	}
+
+
+}
+
+void display()     //udf to display final details of the user
+{
+
+
+	switch(movie_name)
+	{
+		case 1: cout<<"\n\n\t\t\tZombieland 2";
+			cout<<"\n\t\t\tEnglish U/A";
+			break;
+		case 2: cout<<"\n\n\t\t\tMaleficent";
+			cout<<"\n\t\t\tEnglish U/A";
+			break;
+		case 3: cout<<"\n\n\t\t\tWar";
+			cout<<"\n\t\t\tHindi U/A";
+			break;
+		case 4: cout<<"\n\n\t\t\tHousefull 4";
+			cout<<"\n\t\t\tHindi U/A";
+			break;
+		default:break;
+	}
+	switch(movie_time)
+	{	
+case 1: cout<<"\n\n\t\t\t11:00 am - 2:00 pm";
+			break;
+		case 2: cout<<"\n\n\t\t\t3:00 pm - 6:00 pm";
+			break;
+		case 3: cout<<"\n\n\t\t\t7:00 pm - 10:00 pm";
+			break;
+		default: break;
+	}
+	cout<<"\n\n\t\t\tSeats Selected:";
+	for(i=0;i<seat_no;i++)
+	{
+		p=seat_book[i];
+		cout<<p<<" ";
+
+	}
+	cout<<"\n\n\t\tPlease show the above details at the ticket counter"<<endl;
+		cout<<"\t\t\tand make the reqiured payment !";
+	getch();
+}
+
+void main()
+{
+	clrscr();
+	beginning();
+}
+
